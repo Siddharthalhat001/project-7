@@ -7,13 +7,14 @@ pipeline {
             steps {
                 git branch:'master',                
                 url:'https://github.com/Siddharthalhat001/project-7.git'
+                sh "docker-compose  build"
                 }
             }              
 
         stage('BUILDING DOCKER IMAGE') {
             steps {
                 echo 'Building the Application .....'               
-                sh "docker-compose  build"
+                
                 echo 'Application Image Built Successfully !!!'
             }
         }
