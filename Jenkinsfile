@@ -21,7 +21,7 @@ pipeline {
         stage('Docker Compose Down') {
             steps {
                 echo 'Taking down the Application .....'                
-                sh 'docker-compose  down'
+                sh "docker-compose  down"
                 echo 'Application down Successfully !!!'
             }
         }
