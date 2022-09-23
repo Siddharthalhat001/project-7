@@ -13,7 +13,9 @@ pipeline {
         stage('BUILDING DOCKER IMAGE') {
             steps {
                 echo 'Building the Application .....'               
-                sh ' docker-compose  build'
+                sh ''' 
+                docker-compose  build 
+                '''
                 echo 'Application Image Built Successfully !!!'
             }
         }
