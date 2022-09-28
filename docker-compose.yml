@@ -17,7 +17,7 @@ services:
     build:
       context: backend
       dockerfile: Dockerfile
-    image: proj7-backend:1
+    image: siddharthalhat001/proj7-backend:1
     container_name: proj7-backend
     environment:
       spring.datasource.url: jdbc:postgresql://db:5432/hrms
@@ -35,7 +35,7 @@ services:
     build:
       context: frontend
       dockerfile: Dockerfile
-    image: proj7-frontend:1
+    image: siddharthalhat001/proj7-frontend:1
     container_name: proj7-frontend
     restart: always    
     ports:
