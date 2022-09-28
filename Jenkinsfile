@@ -1,6 +1,6 @@
 pipeline {
    
-    agent any
+    agent { label 'proj-7' }
   
     stages {
         stage('CHECKOUT THE SOURCE CODE'){
