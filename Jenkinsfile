@@ -18,7 +18,16 @@ pipeline {
                 echo 'Application Image Built Successfully !!!'
             }
         }
-        
+       
+        stage('Push Images to Doker hub ') {
+            steps {
+                sh 'docker login'
+                echo 'Successfully Log in  .....'                
+                sh "docker push siddharthalhat001/proj7-frontend:$(BUILD_NUMBER)"
+                sh "docker push siddharthalhat001/proj7-backend:$(BUILD_NUMBER)"
+                echo 'Application down Successfully !!!'
+            }
+        }       
         stage('Docker Compose Down') {
             steps {
                 echo 'Taking down the Application .....'                
