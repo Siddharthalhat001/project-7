@@ -18,13 +18,21 @@ pipeline {
                 echo 'Application Image Built Successfully !!!'
             }
         }
+        stage('GENERATING ENV FILES') {
+            steps {
+                sh '''
+                    TAG= '$TAG'
+                    '''
+                }
+            }       
        
+                          
         stage('Push Images to Doker hub ') {
             steps {
                 sh 'docker login'
                 echo 'Successfully Log in  .....'                
                 sh "docker push siddharthalhat001/proj7-backend:1"
-                sh "docker push siddharthalhat001/proj7-frontend:${BUILD_NUMBER} "              
+                sh "docker push siddharthalhat001/proj7-frontend:${TAG} "              
                 echo 'Application down Successfully !!!'
             }
         }       
