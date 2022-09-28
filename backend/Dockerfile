@@ -8,7 +8,7 @@ COPY . .
 
 FROM openjdk:17-slim
 
-COPY --from=builder .backend/target/hrms-0.0.1-SNAPSHOT.jar .
+COPY --from=builder .target/hrms-0.0.1-SNAPSHOT.jar .
 
 ENTRYPOINT ["java","-jar","target/hrms-0.0.1-SNAPSHOT.jar"]
 
