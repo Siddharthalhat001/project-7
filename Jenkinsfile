@@ -23,8 +23,8 @@ pipeline {
             steps {
                 sh 'docker login'
                 echo 'Successfully Log in  .....'                
-                sh "docker push siddharthalhat001/proj7-backend "
-                sh "docker push siddharthalhat001/proj7-frontend "              
+                sh "docker push siddharthalhat001/proj7-backend:1"
+                sh "docker push siddharthalhat001/proj7-frontend:1"              
                 echo 'Application down Successfully !!!'
             }
         }       
