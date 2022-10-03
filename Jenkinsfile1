@@ -1,0 +1,33 @@
+pipeline {
+    agent { label "proj-7"}
+    stages {
+        stage('CHECKOUT THE APP CODE'){
+            steps {
+                git branch:'$BRANCH',                
+                url:'https://github.com/Siddharthalhat001/project-7.git'
+                  }
+            }  
+        stage('APPLICATION DOWN ..'){
+            steps{            
+                echo "APPLICATION DOWN .."
+                sh "sudo docker-compose down"
+                echo "Application taken down successfully!!!"                
+            }
+        }
+        stage('BUILDING IMAGES ..'){
+            steps{                 
+                echo "BUILDING IMAGES .."
+                sh "sudo docker-compose build --no-cache"
+                echo "Images Built successfully!!!"
+               }
+        }  
+      
+        stage('DEPLOYING ..'){
+               steps{            
+                echo "DEPLOYING .."
+                sh "sudo docker-compose up"
+                echo "Application deployed successfully!!!"
+            }
+        } 
+    }
+}  
