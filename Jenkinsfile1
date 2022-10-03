@@ -3,7 +3,7 @@ pipeline {
     stages {
         stage('CHECKOUT THE APP CODE'){
             steps {
-                git branch:'$BRANCH',                
+                 git branch:'master',                
                 url:'https://github.com/Siddharthalhat001/project-7.git'
                   }
             }  
