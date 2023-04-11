@@ -2,10 +2,11 @@ version: '3.6'
 services:
   db:
     image: postgres
+    container_name: db
     restart: always
     environment:
-      POSTGRES_USERNAME: postgres
-      POSTGRES_PASSWORD: postgres
+      POSTGRES_USERNAME: ${POSTGRES_USERNAME}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
       - 5432:5432
     networks:
@@ -17,27 +18,28 @@ services:
     build:
       context: backend
       dockerfile: Dockerfile
-    image: siddharthalhat001/proj7-backend:1
-    container_name: proj7-backend
+    image: proj7-backend:${VERSION}
+    container_name: backend
     environment:
-      spring.datasource.url: jdbc:postgresql://db:5432/hrms
-      spring.datasource.username: postgres
-      spring.datasource.password: postgres
-    restart: always    
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
+      DB: ${DB}
+      DB_USER: ${POSTGRES_USERNAME}
+      DB_PASSWORD: ${POSTGRES_PASSWORD}
+    restart: always
     ports:
       - 9001:9001
     depends_on:
       - db
     networks:
       - proj
-
   frontend:
     build:
       context: frontend
       dockerfile: Dockerfile
-    image: siddharthalhat001/proj7-frontend:1
-    container_name: proj7-frontend
-    restart: always    
+    image: proj7-frontend:${VERSION}
+    container_name: frontend
+    restart: always
     ports:
       - 80:80
     depends_on:
@@ -45,11 +47,9 @@ services:
       - backend
     networks:
       - proj
-
-      
 networks:
   proj:
-      name: proj 
-           
+    external:
+      name: proj
 volumes:
   my-db:

@@ -1,0 +1,105 @@
+
+
+pipeline {
+   
+    agent { label 'proj-7' }
+  
+    stages 
+    {
+        stage('CHECKOUT THE SOURCE CODE')
+        {
+            steps 
+            {
+                git branch:'$BRANCH',
+                credentialsId:'proj7-git',
+                url:'git@gitlab.zymrinc.com:ZDevOps/devops-proj-7.git'
+                
+            }
+        }
+        stage('GENERATING ENV FILES') 
+        {
+            steps 
+            {
+                
+                sh '''cat > .env <<EOL
+                    POSTGRES_USERNAME=$POSTGRES_USERNAME
+                    POSTGRES_PASSWORD=$POSTGRES_PASSWORD
+                    POSTGRESDB_DOCKER_PORT=$POSTGRESDB_DOCKER_PORT
+                    POSTGRESDB_DATABASE=$POSTGRESDB_DATABASE
+                    POSTGRES_HOST= ${POSTGRES_HOST}
+                    REACT_APP_API_ENDPOINT=${REACT_APP_API_ENDPOINT}
+                    VERSION=${VERSION}
+
+                    '''
+            }
+        }
+
+
+        stage('BUILDING DOCKER IMAGES FOR FRONTEND AND BACKEND') 
+        {
+            steps 
+            {
+                echo 'Building the Application .....'                
+                sh 'docker-compose build '
+                echo 'Application Image Built Successfully !!!'
+            }
+        }   
+
+        stage('Docker Compose Down') 
+        {
+            steps 
+            {
+                echo 'Taking down the Application .....'
+                sh 'docker-compose down '
+                echo 'Application down Successfully !!!'
+            }
+        }
+
+        stage('Removing not in used containers') 
+        {
+            steps 
+            {
+                echo 'Removing not in used Containers  .....'
+                sh 'docker container prune -f'
+                echo 'Successfully removed not in used containers !!!'
+                
+                
+            }
+        }        
+        stage('DEPLOY') 
+        {
+            steps 
+            {
+                echo 'Deploying the Application .....'
+                sh 'docker-compose up -d '
+                echo 'Application Running Successfully !!!'
+            }
+        }
+        stage('Uploading Images to Registry ..')
+        {
+            steps
+            {
+                withCredentials([usernamePassword(credentialsId: 'Nexus-Cred', passwordVariable: 'password', usernameVariable: 'username')]) 
+                {
+                 sh 'docker login http://20.20.1.127:8085 -u $username -p $password'
+                 sh 'docker tag proj7-frontend 20.20.1.127:8085/devops-proj7/proj7-frontend:${VERSION}'
+                 sh 'docker push 20.20.1.127:8085/devops-proj7/proj7-frontend:${VERSION}'
+                 sh 'docker tag proj7-backend 20.20.1.127:8085/devops-proj7/proj7-backend:${VERSION}'
+                 sh 'docker push 20.20.1.127:8085/devops-proj7/proj7-backend:${VERSION}'
+               }
+            }
+        }
+        stage('Application is live on') 
+        {
+            steps 
+            {
+                echo 'Application is running Succesfully  .....'
+                echo 'Too see it, Click on below link .....'                
+                echo "http://20.20.4.30/"                                        
+            }
+        }
+        
+    }
+}
+
+

@@ -1,0 +1,38 @@
+pipeline {   
+    agent { label 'proj-7' }  
+    stages 
+    {
+    stage('CHECKOUT THE SOURCE CODE')
+        {
+            steps 
+            {
+                git branch:'$BRANCH',
+                credentialsId:'proj7-git',
+                url:'git@gitlab.zymrinc.com:ZDevOps/devops-proj-7.git'                
+            }
+        }
+    stage('Deploying on Kubernetes cluster ..')
+    {
+        steps
+           {
+                 sh 'kubectl apply -f k8s/env/cm.yml'
+                 sh 'kubectl apply -f k8s/env/secret.yml'
+                 sh 'kubectl apply -f k8s/database/pv_and_pvc.yml'
+                 sh 'kubectl apply -f k8s/database/db.yml'
+                 sh 'kubectl apply -f k8s/application/backend.yml'
+                 sh 'kubectl apply -f k8s/application/frontend.yml'                 
+                 echo "Application deployed successfully on k8's cluster!!!"
+            }
+        }
+        stage('Application is live on') 
+        {
+            steps 
+            {
+                echo 'Application is running Succesfully  .....'
+                echo 'Too see it, Click on below link .....'                
+                echo "Docker Application is live on : http://20.20.4.30/"
+                echo "Kubernates Application is live on : http://20.20.4.27:30111/"                
+            }
+        }        
+    } 
+    }
