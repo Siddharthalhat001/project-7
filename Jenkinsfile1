@@ -1,5 +1,5 @@
 pipeline {
-    agent { label "proj-7"}
+    agent any
     stages {
         stage('CHECKOUT THE APP CODE'){
             steps {
